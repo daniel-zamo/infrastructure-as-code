@@ -1,5 +1,10 @@
 # Infrastructure as Code (IaC) - Managed Services Ecosystem
 
+![License](https://img.shields.io/badge/license-MIT-green)
+![Docker](https://img.shields.io/badge/docker-v24.0+-blue?logo=docker)
+![n8n](https://img.shields.io/badge/automation-n8n-red?logo=n8n)
+![OS](https://img.shields.io/badge/OS-Debian%2012-A81D33?logo=debian)
+
 Este repositorio centraliza la definición, orquestación y despliegue de la infraestructura de servicios del ecosistema **Balaitus.net**. El proyecto sigue principios de **GitOps** y **IaC** para garantizar la portabilidad y escalabilidad de las soluciones sobre entornos Linux (Debian/OpenMediaVault).
 
 ## 🚀 Arquitectura del Proyecto
@@ -27,4 +32,8 @@ La infraestructura está organizada por dominios funcionales, permitiendo una ge
 │   └── storage/         # Persistencia de datos y nubes privadas
 └── scripts/             # Automatización de tareas de sistema y despliegue
 ```
+
+## ⚖️ Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 

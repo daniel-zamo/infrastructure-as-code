@@ -1,6 +1,14 @@
 # ZenBridge: WhatsApp-to-Email Gateway
 
+![Status](https://img.shields.io/badge/status-active-success)
+![Category](https://img.shields.io/badge/category-communication-orange)
+![Self-Hosted](https://img.shields.io/badge/self--hosted-OMV7-blue)
+
+**ZenBridge** es un servicio de orquestación de comunicaciones diseñado para transformar flujos de mensajería instantánea (WhatsApp Business API) en notificaciones de correo electrónico asíncronas.
+
+<!-- 
 **ZenBridge** es un servicio de orquestación de comunicaciones diseñado para transformar flujos de mensajería instantánea (WhatsApp Business API) en notificaciones de correo electrónico asíncronas, optimizando la gestión de la atención y reduciendo la fatiga por notificaciones en tiempo real.
+-->
 
 ## 🧠 Lógica del Sistema
 
