@@ -9,11 +9,10 @@ Este repositorio centraliza la definición, orquestación y despliegue de la inf
 
 ## 🚀 Arquitectura del Proyecto
 
-La infraestructura está organizada por dominios funcionales, permitiendo una gestión modular de los contenedores Docker y sus configuraciones asociadas.
+Organizada por capas para separar la infraestructura del despliegue lógico:
 
-- **Deployments**: Definiciones de servicios (Docker Compose) categorizados por su propósito (Comunicación, Proxy, Almacenamiento).
-- **Automation**: Scripts de mantenimiento y flujos de integración.
-- **Security**: Políticas de endurecimiento (hardening) y gestión de certificados SSL.
+- **Deployments**: Orquestación Docker para servicios core (Proxy, Automation, Storage).
+- **Automation**: Lógica de negocio y flujos de integración (Workflows de n8n, Scripts).
 
 ## 🛠 Tecnologías Principales
 
@@ -26,11 +25,13 @@ La infraestructura está organizada por dominios funcionales, permitiendo una ge
 
 ```text
 .
+├── automation/
+│   └── workflows/       # Flujos lógicos (IA, Notificaciones, Procesamiento)
 ├── deployments/
-│   ├── communication/   # Pasarelas de mensajería y flujos de notificación
-│   ├── proxy/           # Gestión de tráfico e identidad (NPM)
-│   └── storage/         # Persistencia de datos y nubes privadas
-└── scripts/             # Automatización de tareas de sistema y despliegue
+│   ├── automation/      # Despliegue de n8n (Automation Hub)
+│   ├── proxy/           # Nginx Proxy Manager & SSL
+│   └── storage/         # Persistencia de datos
+└── scripts/             # Tareas de mantenimiento de sistema
 ```
 
 ## ⚖️ Licencia
