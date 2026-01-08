@@ -1,0 +1,252 @@
+{
+  "name": "az-104-ai-exam-processor",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "🎓 AZ-104 Expert Solver",
+        "formDescription": "Sube la captura de pantalla de la pregunta de Azure para su análisis.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "exam_file",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".jpg, .jpeg, .png, .webp",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "Analizando la pregunta... En unos segundos verás los resultados en tu hoja de Google Sheets."
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -384,
+        -448
+      ],
+      "id": "",
+      "name": "trigger_form_exam_capture",
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Please analyze the attached AZ-104 exam image and solve it step-by-step according to your expert instructions.",
+        "options": {
+          "systemMessage": "=**Role**: Senior Azure Solutions Architect & Microsoft Certified Trainer.\n**Context**: You are analyzing screenshots from the AZ-104 (Microsoft Azure Administrator) exam.\n\n**Mission**: Provide the most accurate, technically sound, and pedagogical solution.\n\n**Rules**:\n1. **Identify Resources**: List all Azure components shown (VMs, NSGs, ASGs, VNETs, etc.).\n2. **Logic Analysis**: Explain the underlying technical dependencies (e.g., how a peering affects traffic, or how soft-delete impacts vault deletion).\n3. **Correct Answer**: Clearly state the correct option(s).\n4. **Distractor Analysis**: Briefly explain why the other options are technically incorrect.\n5. **Documentation Reference**: Mention the specific Azure service or feature name as found in official MS Learn documentation.\n\n**Format**: \nUse structured Markdown. Use bold text for key terms and bullet points for readability.",
+          "passthroughBinaryImages": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -128,
+        -448
+      ],
+      "id": "",
+      "name": "logic_ai_azure_analyst"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -208
+      ],
+      "id": "",
+      "name": "model_gemini_flash",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "",
+          "name": "google_gemini_api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "",
+              "name": "date",
+              "value": "={{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}",
+              "type": "string"
+            },
+            {
+              "id": "",
+              "name": "file_name",
+              "value": "={{ $node[\"trigger_form_exam_capture\"].binary.exam_file.fileName }}",
+              "type": "string"
+            },
+            {
+              "id": "",
+              "name": "ai_explanation",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -448
+      ],
+      "id": "",
+      "name": "logic_prepare_sheets_data"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REEMPLAZAR_POR_ID_DE_TU_HOJA",
+          "mode": "list",
+          "cachedResultName": "Nombre_de_tu_Hoja_Azure",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REEMPLAZAR_POR_ID_DE_TU_HOJA/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/REEMPLAZAR_POR_ID_DE_TU_HOJA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $json.date }}",
+            "Question_File": "={{ $json.file_name }}",
+            "Explanation": "={{ $json.ai_explanation }}"
+          },
+          "matchingColumns": [
+            "Date"
+          ],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Question_File",
+              "displayName": "Question_File",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Explanation",
+              "displayName": "Explanation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        -448
+      ],
+      "id": "",
+      "name": "gsheets_append_exam_data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "google_sheets_api"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "trigger_form_exam_capture": {
+      "main": [
+        [
+          {
+            "node": "logic_ai_azure_analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "logic_ai_azure_analyst": {
+      "main": [
+        [
+          {
+            "node": "logic_prepare_sheets_data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "model_gemini_flash": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "logic_ai_azure_analyst",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "logic_prepare_sheets_data": {
+      "main": [
+        [
+          {
+            "node": "gsheets_append_exam_data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "github-public-share"
+  },
+  "id": null,
+  "tags": []
+}

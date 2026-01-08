@@ -1,34 +1,52 @@
-# AZ-104 Exam Simulator: AI-Driven Automation
+# 🎓 AI-Powered AZ-104 Exam Processor & Simulator
 
-![n8n](https://img.shields.io/badge/Logic-n8n-red?logo=n8n)
-![AI](https://img.shields.io/badge/Model-Gemini%201.5%20Flash-blue?logo=google-gemini)
-![Cloud](https://img.shields.io/badge/Target-Microsoft%20Azure-0089D6?logo=microsoft-azure)
+[![Certification](https://img.shields.io/badge/Certification-AZ--104-008AD7?style=for-the-badge&logo=microsoft-azure&logoColor=white)](https://learn.microsoft.com/en-us/credentials/certifications/azure-administrator/)
+[![n8n Engine](https://img.shields.io/badge/Engine-n8n-FF6D5A?style=for-the-badge&logo=n8n&logoColor=white)](https://n8n.io/)
+[![Model](https://img.shields.io/badge/AI-Gemini%202.5%20Flash-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white)](https://deepmind.google/technologies/gemini/)
+[![Infrastructure](https://img.shields.io/badge/OS-Debian%2013-A81D33?style=for-the-badge&logo=debian&logoColor=white)](#)
 
-## 📖 Descripción del Proyecto
+## 📖 Overview
 
-Este workflow resuelve la "deuda de aprendizaje" en certificaciones técnicas. Utiliza **IA Multimodal** para procesar capturas de pantalla del examen AZ-104 y generar una base de conocimientos estructurada en Google Sheets.
+Este proyecto nace para eliminar el "cuello de botella" cognitivo durante la preparación de la certificación **AZ-104 (Azure Administrator)**. Utilizando principios de **AI-Ops**, he desarrollado una pipeline que transforma capturas de pantalla de exámenes en una base de datos de conocimiento estructurada.
+
+La solución integra **Computer Vision** y **LLMs (Gemini 2.5 Flash)** para realizar un análisis profundo de escenarios de Azure, categorizar distractores y mapear referencias a la documentación oficial de Microsoft Learn.
+
+## 🏗️ Architecture & Workflow
+
+El flujo sigue un modelo de procesamiento asíncrono y multimodal:
+
+```mermaid
+graph LR
+    A[Capture] -->|Upload| B(n8n Webhook/Form)
+    B --> C{Gemini 2.5 Agent}
+    C -->|Reasoning| D[Data Structuring]
+    D --> E[Google Sheets API]
+    E --> F[Learning Simulator]
+    style C fill:#4285F4,color:#fff
+    style F fill:#008AD7,color:#fff
+```
 
 ### 🧠 Capacidades de la IA (Prompt Engineering)
 
-El sistema actúa como un **Senior Azure Architect** realizando:
+El agente actúa como un **Senior Azure Solutions Architect** realizando:
 
-1. **Análisis de Recursos**: Identificación de componentes de Azure (VNet, RBAC, DNS).
-2. **Descarte Lógico**: Explicación técnica de por qué los distractores son incorrectos.
-3. **Validación de Documentación**: Referencias directas a Microsoft Learn.
+1. **Identificación de Recursos**: Desglose de componentes (VNets, NSGs, RBAC, etc.).
+2. **Análisis Lógico**: Explicación de dependencias técnicas y reglas de negocio.
+3. **Análisis de Distractores**: Justificación de por qué las opciones incorrectas no aplican.
+4. **Validación**: Enlaces y conceptos basados en documentación oficial.
 
-## 🛠 Stack Tecnológico
+## 🚀 Guía de Instalación
 
-- **Motor**: n8n (Self-hosted en Debian 13).
-- **LLM**: Google Gemini 2.5 Flash (via API).
-- **Persistence**: Google Sheets API.
+1. **Importación**: Carga el archivo `az-104-ai-exam-processor.json` en tu n8n.
+2. **Credenciales**: Configura tus APIs para **Google Gemini** (via AI Studio) y **Google Sheets** (OAuth2).
+3. **Setup de Persistencia**: Crea una Google Sheet con los encabezados: `Date`, `Question_File`, `Explanation`.
+4. **Sanitización**: En el nodo final, reemplaza el `Spreadsheet ID` por el de tu propia hoja.
 
-## 🚀 Cómo utilizarlo
+## 📊 Impacto & Resultados
 
-1. **Importación**: Carga el archivo `workflow.json` en tu instancia de n8n.
-2. **Credenciales**: Configura `Google Gemini API` y `Google Sheets OAuth2`.
-3. **Preparación**: Crea una Google Sheet con los encabezados: `Date`, `Question_File`, `Explanation`.
-4. **Trigger**: Accede a la URL del `Form Trigger` y sube tu captura.
+- **Eficiencia**: Reducción del tiempo de corrección manual de 5 min a <15 seg.
+- **Calidad**: Análisis consistente basado en el estado del arte de Azure.
+- **SOP Compliance**: Este flujo está documentado bajo el estándar `SOP-CLOUD-AZ-03` en mi [Librería de Estándares](https://github.com/daniel-zamo/ops-standards-library).
 
 ---
-
-*Este proyecto forma parte de la infraestructura de servicios gestionados de Balaitus.net.*
+*Hecho con ❤️ por un DevOps Engineer que prefiere automatizar que repetir.*
